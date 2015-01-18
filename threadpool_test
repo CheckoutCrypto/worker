@@ -1,0 +1,12 @@
+#!/bin/bash
+
+        for (( x=1; x<= 1000; x++ ))
+        do
+			curl "http://127.0.0.1/api/samples/phpwakeupcallsample.php"
+			  curl "http://127.0.0.1/api/samples/phpwakeupcallsample2.php"
+			  curl "http://127.0.0.1/api/samples/phpwakeupcallsample3.php"
+			  curl "http://127.0.0.1/api/samples/phpwakeupcallsample4.php"
+			  curl "http://127.0.0.1/api/samples/phpwakeupcallsample5.php"
+			  curl "http://127.0.0.1/api/samples/phpwakeupcallsample6.php"
+			  curl "http://127.0.0.1/api/samples/phpwakeupcallsample7.php"
+        done

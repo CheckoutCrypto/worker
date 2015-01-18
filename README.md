@@ -1,2 +1,4 @@
-# worker
-CheckoutCrypto's CryptoCurrency Worker Server
+cgserver
+========
+
+Coingateway Worker Server Concept
