@@ -13,8 +13,6 @@ EXPOSE 12311
 
 WORKDIR /worker
 
-CMD ["./workServer"]
-
 
 
 
