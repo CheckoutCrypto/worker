@@ -1,17 +1,75 @@
-CheckoutCrypto Worker
-==========
+#CheckoutCrypto Worker
+![Alt text](https://github.com/CheckoutCrypto/crypto-api/blob/master/control/2fa/images/checkoutcrypto_logo.jpg "CheckoutCrypto logo")
+
+## Table of contents
+
+- [Dependencies](#dependencies)
+- [Optionally](#optionally)
+- [Docker](#docker)
+- [Usage Menu](#usage-menu)
+- [Usage Server](#usage-server)
+- [Post-installation](#post-installation)
+- [Menu](#menu)
+- [Explanation](#explanation)
+- [Logs](#logs)
+- [Bugs](#bugs)
+- [License](#license)
+
+###Dependencies
+
 ```
 sudo apt-get install git qt5-default qt5-qmake libqt5sql5 libqt5sql5-mysql libqt5sql5-sqlite build-essential libmysqlclient-dev monit
 git clone https://github.com/CheckoutCrypto/worker
 cd ./worker
 qmake && make
+```
+All the above are preinstalled in the docker image
+
+#### Optionally
 Create a worker service at /etc/init.d/worker
 add worker service to default:
+
+```
 sudo /usr/sbin/update-rc.d worker defaults
 ```
 
-<h2>Menu</h2>
-=======
+## Docker
+### Required Containers
+Run MySQL daemon container with mysql-server (exposed port 3306)
+
+```
+docker run --name mysql -e MYSQL_ROOT_PASSWORD=somepass -d mysql
+```
+
+Run PHPMyAdmin daemon container with mysql connection(exposed port 80 mapped to 81)
+
+```
+docker run -d --link mysql:mysql -e MYSL_USERNAME=root --name phpmyadmin -p 81:80 corbinu/docker-phpmyadmin
+```
+
+###Usage Menu
+
+```
+ docker run -d -it -p 12311:12311 --name worker --link mysql:mysql checkoutcrypto/worker-qt /worker/workServer
+```
+
+###Usage Server
+
+```
+ docker run -it -p 12311:12311 --name worker --link mysql:mysql checkoutcrypto/worker-qt /worker/workServer -server -pass test
+```
+
+
+###Post-installation
+
+- [CheckoutCrypto Drupal Site and Database](https://registry.hub.docker.com/u/checkoutcrypto/site/) Installed and configured separately.
+- [CheckoutCrypto API](https://registry.hub.docker.com/u/checkoutcrypto/crypto-api/)
+- [Bitcoin daemon](https://bitcoin.org/en/download)
+
+[Read the repository for more information](https://github.com/CheckoutCrypto/worker) 
+
+###Menu
+
 ```
 Welcome to the Worker 
 ********************************
@@ -26,36 +84,34 @@ Welcome to the Worker
 Enter Choice(0-4): 
 ```
 
-<h3>Explanation</h3>
-<ol>
-<li>Add/Edit the Site Front-end Database </li>
-<li>Add/Edit the RPC Information for each cryptocurrency daemon</li>
-<li>Add/Update the API key, necessary to connect the API -> Worker (ccapiconfig.php in API repo)</li>
-<li>Start temporary Worker Server</li>
-</ol>  
+####Explanation
+1. Add/Edit the Site Front-end Database
 
-<h3>Start Worker Server</h3>
-```
-cd ./worker
-./workServer -server -pass YOURPASSWRD   
-```
-The password is weak, visible, breakable, not a good option for security at the moment. Ideally in the near future, I'd like to make better use of encryption libraries, for dealing with the rpc information in cache.  That is the only reason for the password, it provides very basic encryption instead of text based (e.g. your skype message cache). An assumption is made that your linux user account is the master password for all your currencies.  Certainly not the most secure method for production.
+2. Add/Edit the RPC Information for each cryptocurrency daemon
 
-<h3>Cache</h3>
+3. Add/Update the API key, necessary to connect the API -> Worker (ccapiconfig.php in API repo)
+
+4. Start temporary Worker Server
+
+###Start Worker Server
+```
+/worker/workServer -server -pass YOURPASSWRD   
+```
+
+### SQLite Cache
 ~/.cache/worker2/cache.db
 
-<h3>Log</h3>
-```
-sudo touch /var/log/worker.log
-sudo chown ccuser:ccuser /var/log/worker.log   ( or anyother user/group )
-sudo chmod 777 /var/log/worker.log
+###Log
 
-View Log with:
-sudo tail -n 200 /var/log/worker.log
+```
+View Log(after running server mode once) with:
+docker exec -it worker tail -n 200 /var/log/worker.log
 ```
 
-<h3>known bugs: </h3>
-<ol>
-<li>memory leak(1 gig after tens of thousands of orders), restart worker with monit.  If you have/know a fix please contact maintainer.</li>
-<li>password protection is very weak, assuming linux user isn't compromised isn't enough, this needs to be beefed up on any production level server.</li>
-</ol>
+###bugs: 
+1. memory leak(1 gig after tens of thousands of orders), restart worker with monit.  If you have/know a fix please contact maintainer.
+
+2. password protection is very weak, assuming linux user isn't compromised isn't enough, this needs to be beefed up on any production level server.
+
+##License
+[Licensed under GPLv3](https://github.com/CheckoutCrypto/site/blob/master/COPYRIGHT) with one small reservation.
