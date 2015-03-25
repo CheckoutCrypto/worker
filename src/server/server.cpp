@@ -64,7 +64,7 @@ void Server::start(){
     host.setAddress("127.0.0.1");  // localhost
     server = new QTcpServer(this);
     connect(server, SIGNAL(newConnection()), SLOT(newConnection()));
-    qDebug() << "Coingateway Server started!" << endl;
+    qDebug() << "CheckoutCrypto Server started!" << endl;
     qDebug() << "Address: " << host.toString().toStdString().c_str() << "Port: "<< 12311 << "Listening: " << server->listen(host, 12311);
 
     startNewThread(control, WORK_TABLE, "work");
