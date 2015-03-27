@@ -98,6 +98,19 @@ Enter Choice(0-4):
 /worker/workServer -server -pass YOURPASSWRD   
 ```
 
+###Listen IP + Port
+in ./src/server/server.cpp on line 64
+```
+host.setAddress("127.0.0.1"); 
+```
+
+and on line 68 you can change the port
+```
+server->listen(host, 12311);
+```
+
+If you're running CheckoutCrypto's stack, this will be automatically built to 0.0.0.0
+
 ### SQLite Cache
 ~/.cache/worker2/cache.db
 
@@ -114,4 +127,4 @@ docker exec -it worker tail -n 200 /var/log/worker.log
 2. password protection is very weak, assuming linux user isn't compromised isn't enough, this needs to be beefed up on any production level server.
 
 ##License
-[Licensed under GPLv3](https://github.com/CheckoutCrypto/site/blob/master/COPYRIGHT) with one small reservation.
+[Licensed under Apache 2.0 License](https://github.com/CheckoutCrypto/site/blob/master/COPYRIGHT) with one small reservation.

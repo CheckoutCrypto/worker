@@ -11,11 +11,11 @@ ADD COPYRIGHT /worker/COPYRIGHT
 
 RUN apt-get update && \
     apt-get install -y git qt5-default qt5-qmake libqt5sql5 libqt5sql5-mysql libqt5sql5-sqlite libmysqlclient-dev build-essential monit && \
-	cd /worker && \
-	qmake && make && \
 	mkdir /root/.cache/worker2/ -p && \
+	cd /worker && \
+	sed -i "s/127.0.0.1/0.0.0.0/" /worker/src/server/server.cpp && \
+	qmake && make && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 
 EXPOSE 12311
 
